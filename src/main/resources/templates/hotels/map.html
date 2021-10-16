@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Tratador</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link
+	href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.1/css/bootstrap.min.css"
+	rel="stylesheet" media="screen" />
+<script th:src="@{|/js/jquery.js|}"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script th:src="@{|/js/pikaday.js|}"></script>
+<link rel="stylesheet" th:href="@{|/css/pikaday.css|}" />
+<link rel="stylesheet" type="text/css" th:href="@{|/css/general.css|}" />
+
+<script th:src="@{|/js/api-maps.js|}"></script>
+<script th:src="@{|/js/sss.js|}"></script>
+
+<link rel="stylesheet" th:href="@{|/css/sss.css|}" type="text/css"
+	media="all" />
+
+<style type="text/css">
+	.booked { background-color: #D32F2F; }
+	.free { background-color: #388E3C; }
+</style>
+
+</head>
+
+<body>
+	<div th:include="fragments/header"></div>
+	<div class="container">
+		<div th:fragment="hotel-header" class="page-header">
+			<h1>
+				<span th:text="${hotel.name}"></span> <small>Mapa de Ocupação</small>
+			</h1>
+		</div>
+
+		<table class="table table-bordered table-condensed">
+			<thead>
+				<tr>
+					<th><i class="glyphicon glyphicon-calendar"></i> Check-In</th>
+					<th><i class="glyphicon glyphicon-calendar"></i> Check-Out</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><i class="glyphicon glyphicon-time"></i> <span
+						th:text="${#dates.day(begin_date)}"></span> <span
+						th:text="${#dates.monthNameShort(begin_date)}"></span> <span
+						th:text="${#dates.year(begin_date)}"></span></td>
+					<td><i class="glyphicon glyphicon-time"></i> <span
+						th:text="${#dates.day(end_date)}"></span> <span
+						th:text="${#dates.monthNameShort(end_date)}"></span> <span
+						th:text="${#dates.year(end_date)}"></span></td>
+				</tr>			
+			</tbody>
+		</table>
+
+		<table class="table table-bordered table-hover">
+			<thead>
+				<tr th:each="ocDates, oStat : ${occupancy}"
+					th:if="${oStat.index < 1}">
+					<th>Room Number</th>
+					<th th:each="o : ${ocDates.value}"><span
+						th:text="${#dates.day(o.key) + ' ' + #dates.monthNameShort(o.key)}"></span>
+					</th>
+				<tr>
+			</thead>
+			<tbody>
+				<tr th:each="oc : ${occupancy}">
+					<td th:text="${oc.key.room_number}"></td>
+					<td th:each="date : ${oc.value}" th:class="${date.value} ? 'booked' : 'free'">
+						<p > </p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+</body>
+</html>
+

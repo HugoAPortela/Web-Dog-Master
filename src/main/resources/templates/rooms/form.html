@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Formulário de Envio de Canik</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.1/css/bootstrap.min.css"
+	rel="stylesheet" media="screen" />
+</head>
+<body>
+	<div class="container">
+		<div th:fragment="roomform(url)">
+			<form action="#" th:action="@{|/hotels/${hotel.id}/rooms/|}"
+				th:object="${room}" method="post">
+				<p>
+					<input type="hidden" th:field="*{id}" />
+					<label>Baia</label><input min="1" class="form-control" placeholder="Baia"
+						type="number" th:field="*{floor}" />
+				</p>
+				<p>
+					<label>Número do Canil</label><input class="form-control"
+						placeholder="Número do Canil" type="text" th:field="*{room_number}" />
+				</p>
+				<p>
+					<label>Preço (R$)</label><input class="form-control"
+						placeholder="Preço por diária" type="text" th:field="*{price}" />
+				</p>
+				<p>
+					<label>Tipo de Canil</label>
+					<select class="form-control" th:field ="*{type}">
+		        		<option th:each="rt : ${roomTypes}" th:text="${rt.description}" th:value="${rt.id}"></option>
+		        	</select>	
+				</p>
+				<p>
+					<input class="btn btn-primary" type="submit" value="Enviar" />
+					<input class="btn btn-default" type="reset" value="Limpar" />
+				</p>
+				<p><a th:href="@{|/hotels/${hotel.id}/rooms/|}">Back</a></p>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
+

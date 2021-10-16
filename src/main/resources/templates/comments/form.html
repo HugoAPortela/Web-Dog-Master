@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Formulário de Envio de Tratadores</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen"/>    
+</head>
+<body>
+	<div class="container">
+	<h1>Formulário de Tratadores</h1>
+	<h2><label>Nome do Canil</label> <span th:text="${hotel.name}"></span></h2>
+		<div th:fragment="commentform(url)">
+	    	<form action="#" th:action="@{|/hotels/${hotel.id}/comments|}" th:object="${comment}" method="post">
+	    		<p>
+			    	<input type="hidden" th:field="*{id}" />		        	
+		        	<p><textarea  rows="10" class="form-control" placeholder="Comentário" th:field="*{text}" ></textarea></p>
+	        	</p>
+	    	    <p><input class="btn btn-primary" type="submit" value="Enviar" /> <input class="btn btn-default" type="reset" value="Limpar" /></p>
+		    </form>
+		    <p><a th:href="@{|/hotels/${hotel.id}|}">Voltar</a></p>
+	    </div>
+    </div>
+</body>
+</html>
+

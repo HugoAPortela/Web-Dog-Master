@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Homepage</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link
+	href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.1/css/bootstrap.min.css"
+	rel="stylesheet" media="screen" />
+</head>
+<body>
+	<div th:include="fragments/header"></div>
+	<div class="container">
+		<div class="page-header">
+			<h1>Entrar</h1>
+		</div>
+		<div th:unless="${param.error == null}">
+			<div class="alert alert-danger" role="alert">
+				<p>O e-mail ou a senha que você inseriu são inválidos, tente novamente.</p>
+			</div>
+		</div>
+		<div th:if="${#httpServletRequest.remoteUser} == null">
+			<form th:action="@{/}" method="post">
+				<p><label>Nome de Usuário</label><input placeholder="Nome de Usuário" class="form-control" type="text" name="username" /></p>
+				<p><label>Senha</label><input placeholder="Senha" class="form-control" type="password" name="password" /></p>
+				<input type="hidden" name="${_csrf.parameterName}"
+					value="${_csrf.token}" />
+				<input class="btn btn-primary" type="submit" value="Entrar" />
+			</form>
+		</div>
+	</div>
+</body>
+</html>

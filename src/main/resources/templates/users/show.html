@@ -1,0 +1,155 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Cabis</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.1/css/bootstrap.min.css"
+	rel="stylesheet" media="screen" />
+<script th:src="@{|/js/jquery.js|}"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<style type="text/css">table tr th {
+  width: 18%;
+}</style>
+</head>
+<body>
+	<div th:include="fragments/header"></div>
+	<div class="container">
+		<div class="page-header">
+			<h1>
+				<span th:text="${user.name}"></span> <small><span
+					th:text="${user.username}"></span></small>
+			</h1>
+			<h4>
+				<span th:if="${user.authority.role} == 'ROLE_COMMENT_MODERATOR'">Moderar Comentário</span>
+				<span th:if="${user.authority.role} == 'ROLE_ADMIN'">Web Admin</span>
+				<span th:if="${user.authority.role} == 'ROLE_HOST_MANAGER'">Gerencie Tratador</span>
+			</h4>
+		</div>
+
+		<div class="tabbable-panel">
+			<div class="tabbable-line">
+				<ul class="nav nav-tabs nav-justified">
+					<li class="active"><a href="#tab_default_1" data-toggle="tab">
+							Reviews e Tratadores</a></li>
+					<li><a href="#tab_default_2" data-toggle="tab">Reservas</a></li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="tab_default_1">
+						<div sec:authorize="hasAnyRole('HOTEL_MANAGER')" class="col-md-6">
+							<h4><i class="glyphicon glyphicon-home"></i> Tratadores Registrados</h4>
+							<div th:if="${!#sets.isEmpty(user.hotels)}">
+								<div th:each="hotel : ${user.hotels}">
+									<a th:text="${hotel.name}" th:href="@{|/hotels/${hotel.id}|}"></a>
+									<a class="pull-right" th:href="@{|/hotels/${hotel.id}/remove|}"><i
+										class="glyphicon glyphicon-trash"></i></a>
+								</div>
+							</div>
+							<p th:if="${#sets.isEmpty(user.hotels)}">
+								<i>Sem Canis Registrados</i>
+							</p>
+						</div>
+						<div class="col-md-6">
+							<h4><i class="glyphicon glyphicon-comment"></i> Escreva Reviews</h4>
+							<div th:if="${!#sets.isEmpty(user.comments)}">
+								<div th:each="comment : ${user.comments}">
+									<p>
+										<i class="glyphicon glyphicon-time"></i> <span
+											th:text="${#dates.monthNameShort(comment.date)}"></span> <span
+											th:text="${#dates.year(comment.date)}"></span> - <b><a
+											th:text="${comment.hotel.name}"
+											th:href="@{|/hotels/${comment.hotel.id}|}"></a></b>
+									</p>
+									<p th:text="${comment.text}"></p>
+								</div>
+							</div>
+							<p th:if="${#sets.isEmpty(user.comments)}">
+								<i>Sem Reviews Escritos</i>
+							</p>
+						</div>
+					</div>
+					<div class="tab-pane" id="tab_default_2">						
+						<h4><i class="glyphicon glyphicon-th-list"></i> Reservas Aprovadas</h4>
+						<div th:if="${!#lists.isEmpty(bookings)}">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Check-in</th>
+										<th>Check-out</th>
+										<th>Canil</th>
+										<th>Tipo de Canil</th>
+										<th>Número do Canil</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tr th:if="${booking.state}" th:each="booking : ${bookings}">
+									<td><span th:text="${#dates.day(booking.begin_date)}"></span>
+										<span th:text="${#dates.monthName(booking.begin_date)}"></span>
+										<span th:text="${#dates.year(booking.begin_date)}"></span></td>
+									<td><span th:text="${#dates.day(booking.end_date)}"></span>
+										<span th:text="${#dates.monthName(booking.end_date)}"></span>
+										<span th:text="${#dates.year(booking.end_date)}"></span></td>
+									 <td>
+										 <a th:text="${booking.hotel.name}"
+											th:href="@{|/hotels/${booking.hotel.id}|}"></a>
+									</td>
+									<td><span th:text="${booking.roomType}"></span></td>
+									<td>
+										<div th:each="r : ${booking.rooms}">
+											<span th:text="${r.room_number}"></span><br>
+										</div>
+									</td>
+									<td><a th:href="@{|/bookings/${booking.id}/remove|}"><i class="glyphicon glyphicon-trash"></i></a></td>
+								</tr>
+							</table>
+						</div>										
+						<p th:if="${#lists.isEmpty(bookings)}">
+							<i>Sem reservas</i>
+						</p>
+						
+						<h4><i class="glyphicon glyphicon-th-list"></i> Reservas Pendentes</h4>
+						<div th:if="${!#lists.isEmpty(bookings)}">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Check-in</th>
+										<th>Check-out</th>
+										<th>Canil</th>
+										<th>Tipo de Canil</th>
+										<th>Número do Canil</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tr th:if="${!booking.state}" th:each="booking : ${bookings}">
+									<td><span th:text="${#dates.day(booking.begin_date)}"></span>
+										<span th:text="${#dates.monthName(booking.begin_date)}"></span>
+										<span th:text="${#dates.year(booking.begin_date)}"></span></td>
+									<td><span th:text="${#dates.day(booking.end_date)}"></span>
+										<span th:text="${#dates.monthName(booking.end_date)}"></span>
+										<span th:text="${#dates.year(booking.end_date)}"></span></td>
+									<td>
+										 <a th:text="${booking.hotel.name}"
+											th:href="@{|/hotels/${booking.hotel.id}|}"></a>
+									</td>
+									<td><span th:text="${booking.roomType}"></span></td>
+									<td>
+										<div th:each="r : ${booking.rooms}">
+											<span th:text="${r.room_number}"></span><br>
+										</div>
+									</td>
+									<td>
+										<a th:href="@{|/bookings/${booking.id}/remove|}"><i class="glyphicon glyphicon-trash"></i></a>										
+									</td>
+								</tr>
+							</table>
+						</div>						
+						<p th:if="${#lists.isEmpty(bookings)}">
+							<i>Sem Reservas</i>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

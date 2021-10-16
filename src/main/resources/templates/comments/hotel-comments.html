@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Lista de Tratadores</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen"/>   
+    <script src="../../../js/jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../css/general.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    
+     
+</head>
+<body>
+
+<div th:include="fragments/header"></div>
+
+    <div class="container">
+	<div class="page-header">
+  		<h1><span th:text="${hotel.name}"></span> <br/> <small><span>Comentários</span></small></h1>
+	</div>
+	
+	<div class="row">
+  		<div class="col-md-12">  			  			
+	  		<div th:if="${comment.status && !comment.isAnswer}" class="panel panel-primary" th:each="comment : ${comments}">
+				<p class="panel-heading">
+					<span><i class="glyphicon glyphicon-user"></i></span>
+					<span th:text="${comment.user.name}"></span>
+					<span class="pull-right">
+							<i class="glyphicon glyphicon-time"></i> 
+							<span th:text="${#dates.monthNameShort(comment.date)}"></span>
+							<span th:text="${#dates.year(comment.date)}"></span>
+						</span>
+		 	   	<div class="panel-body">
+		 	   		<p th:text="${comment.text}"></p> 	   	
+		 	   		<p>
+		 	   			<a data-toggle="collapse" th:href="@{|#${comment.id}-viewreply|}">
+		 	   				<i th:if="${(comment.reply) != null and (comment.reply.status)}" class="glyphicon glyphicon-plus"></i>
+		 	   			</a>		 	   			
+		 	   			<a sec:authorize="hasAnyRole('ADMIN', 'HOTEL_MANAGER')" data-toggle="collapse" th:href="@{|#${comment.id}-reply|}">		 	   						 	   			
+		 	   				<i th:if="${(comment.reply) == null}" class="glyphicon glyphicon-share-alt"></i>		 	   				
+		 	   			</a>
+		 	   		</p>
+		 	   		
+		 	   		<div class="collapse" th:id="|${comment.id}-reply|">
+			 	   		<form action="#" th:action="@{|/hotels/${hotel.id}/comments/${comment.id}/reply|}" th:object="${reply}" method="post">
+				    		<p>
+						    	<input type="hidden" th:field="*{id}" />
+					        	<p><textarea  rows="5" class="form-control" placeholder="Commentário" th:field="*{text}" ></textarea></p>
+				        	</p>				        	
+				    	    <p><input class="btn btn-primary" type="submit" value="Enviar" /> <input class="btn btn-default" type="reset" value="Limpar" /></p>
+					    </form>
+				    </div>		 	   		
+		 	   	</div> 	  
+		 
+		 	   	<div th:if="${(comment.reply != null) and (comment.reply.status)}" th:id="|${comment.id}-viewreply|" class="collapse panel-footer">
+		 	   		<h5>Gerencie Resposta</h5>
+				    <span th:text="${(comment.reply.text)}"></span>				  
+				</div>
+			</div>
+  		</div>
+  	</div>
+	
+	<p><a th:href="@{|/hotels/${hotel.id}|}">Voltar</a></p>
+	</div>
+</body>
+</html>
+

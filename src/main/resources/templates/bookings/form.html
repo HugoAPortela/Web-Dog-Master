@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Formulário de Envio de Reservas</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+    <script th:src="@{|/js/jquery.js|}"></script>
+   
+</head>
+<body>
+	<div class="container">
+		<div th:fragment="bookingform(url)">
+	    	<form action="#" th:action="@{|/bookings/search|}" th:object="${booking}" method="post">
+	    		<div>
+			    	<input type="hidden" th:field="*{id}" />
+		        	<div style="display: inline-block">
+				        <label for="start"><i class='glyphicon glyphicon-calendar'></i> Check-in:</label>				        
+				        <input type="text" class="form-control" id="start" th:field="*{begin_date}"></input>
+				    </div>
+				    
+				    <p></p>				
+				
+				    <div style="display: inline-block">
+				        <label for="end"><i class='glyphicon glyphicon-calendar'></i> Check-out:</label>
+				        <input type="text" class="form-control" id="end" th:field="*{end_date}"/>
+				    </div>	
+				    <div>
+				    
+				    <p></p>
+				    <label><i class="glyphicon glyphicon-user"></i> Tipo de Canil</label>
+			    	<select class="form-control" th:name="roomType">
+	        			<option th:each="rt : ${roomTypes}" th:text="${rt.description + ' - ' +rt.occupancy}" th:value="${rt.id}"></option>
+		        	</select>
+		        	
+		        	 <p></p>
+				    <label>Número de Canis</label>
+			    	<select id="ddl" class="form-control" th:name="numberRooms">
+		        	</select>
+		        	
+		        	</div>	        	
+	        	</div>
+	        	<br>
+	    	    <p><input class="btn btn-primary" type="submit" value="Buscar" /> <input class="btn btn-default" type="reset" value="Limpar" /></p>
+		    </form>
+	    </div>
+    </div>
+    
+</body>
+
+</html>
+

@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Editar Tratador</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen"/>    
+</head>
+<body>
+	<div th:include="fragments/header"></div>
+	<div class="container">
+		<div class="page-header">
+			<h1>Editar Canil <span th:text="${hotel.name}"></span><a class="pull-right" th:href="@{|/hotels/${hotel.id}/remove|}"><i class="glyphicon glyphicon-trash"></i></a></h1>
+		</div>
+		<div th:include="hotels/form :: hotelform(@{|/hotels/${hotel.id}|})"></div>		
+		<p><a th:href="@{|/hotels/${hotel.id}|}">Voltar</a></p>
+    </div>
+</body>
+</html>
+

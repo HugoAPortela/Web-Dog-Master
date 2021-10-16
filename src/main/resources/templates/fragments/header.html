@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<div th:fragment="header">
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a class="navbar-brand" href="/"><i class="glyphicon glyphicon-home"></i></a>
+		    </div>
+
+		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		      
+		      <ul class="nav navbar-nav">
+		        <li><a href="/hotels">Canis <span class="sr-only">(current)</span></a></li>
+		        <li sec:authorize="hasAnyRole('ADMIN')"><a href="/users">Usuários</a></li>
+		        <li sec:authorize="hasAnyRole('HOTEL_MANAGER')"><a href="/bookings">Reservas</a></li>
+		        <li><a href="/bookings/new">Reserve um Canil</a></li>
+		        <li sec:authorize="hasAnyRole('COMMENT_MODERATOR')"><a href="/comments/moderation">Moderar Comentários</a></li>
+		        <li sec:authorize="hasAnyRole('ADMIN')"><a href="/admin">Dashboard (admin)</a></li>		        		        	       
+		      </ul>
+		      <ul class="nav navbar-nav navbar-right">	
+			      <li th:if="${#httpServletRequest.remoteUser} != null"><span class="navbar-text" th:utext="'Logado como <b>' + '<a href=/users/me>' + ${#authentication.principal.user.name} + '</a>' + '</b>'"></span></b></li>
+			      <li>
+			      	<form th:if="${#httpServletRequest.remoteUser} != null" th:action="@{/logout}" method="post">
+	    				<input class="btn btn-link navbar-btn" type="submit" value="Logout"/>
+				  	</form>
+				  </li> 
+				  <li th:if="${#httpServletRequest.remoteUser} == null" ><a href="/users/new">Cadastre-se</a></li>
+		          <li th:if="${#httpServletRequest.remoteUser} == null" ><a href="/users/login">Entrar</a></li>
+		      </ul>
+		      
+			</div>
+		</div>
+	</nav>
+</div>
+</body>
+</html>

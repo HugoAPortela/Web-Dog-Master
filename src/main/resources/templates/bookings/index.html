@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Lista de Reservas</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link
+	href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.1/css/bootstrap.min.css"
+	rel="stylesheet" media="screen" />
+</head>
+<body>
+
+	<div th:include="fragments/header"></div>
+
+	<div class="container">
+		<div class="page-header">
+			<h1>Booking List</h1>
+		</div>
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Nome do Usuário</th>
+					<th>Check-In</th>
+					<th>Check-Out</th>
+					<th>Tratador</th>
+					<th>Tipo</th>
+					<th>Número do Canil</th>
+					<th>Status</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tr th:class="${!booking.state} ? 'warning' : 'success'"
+				th:each="booking : ${bookings}">
+				<td><span th:text="${booking.id}"></span></td>
+				<td><span th:text="${booking.user.name}"></span></td>
+				<td><span th:text="${#dates.day(booking.begin_date)}"></span> <span
+					th:text="${#dates.monthNameShort(booking.begin_date)}"></span> <span
+					th:text="${#dates.year(booking.begin_date)}"></span></td>
+				<td><span th:text="${#dates.day(booking.end_date)}"></span> <span
+					th:text="${#dates.monthNameShort(booking.end_date)}"></span> <span
+					th:text="${#dates.year(booking.end_date)}"></span></td>
+				<td><span th:text="${booking.hotel.name}"></span></td>
+				<td><span th:text="${booking.roomType}"></span></td>
+				<td>
+					<div th:each="r : ${booking.rooms}">
+						<span th:text="${r.room_number}"></span><br>
+					</div>
+				</td>
+				<td><span th:if="${booking.state}"><i
+						class="glyphicon glyphicon-ok"></i></span></td>
+				<td><a th:if="${!booking.state}"
+					th:href="@{|/bookings/${booking.id}/approve|}"><i
+						class="glyphicon glyphicon-ok"></i></a></td>
+				<td><a th:href="@{|/bookings/${booking.id}/remove|}"><i
+						class="glyphicon glyphicon-trash"></i></a></td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>
+
